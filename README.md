@@ -14,7 +14,7 @@ This repository is a Next.js project designed to interact with a Hardhat smart c
 
 The smart contract that this frontend interacts with is available in the `ethertransfercontract` repository. You can view and manage the contract's code and deployment from there.
 
-- **Smart Contract Repository:** [ethertransfercontract](https://github.com/yourusername/ethertransfercontract)
+- **Smart Contract Repository:** [EtherTransferContract](https://github.com/JasonTongg/EtherTransferContract)
 
 ## Frontend Application
 
