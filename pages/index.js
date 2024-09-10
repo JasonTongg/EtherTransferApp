@@ -10,8 +10,8 @@ import { ABI, ADDRESS } from "../utils/ContractData.js";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import Image from "next/image";
-import { FaWallet } from "react-icons/fa6";
-import EthVector from "../public/EthGif.webp";
+import { FaIgloo, FaWallet } from "react-icons/fa6";
+import EthVector from "../public/ethGif.gif";
 import { SiEthereum } from "react-icons/si";
 import Wallet from "../public/wallet.png";
 import { ToastContainer, toast } from "react-toastify";
@@ -62,7 +62,7 @@ const web3Modal = createWeb3Modal({
 });
 
 function useEthereumWallet() {
-  const { address, chainId, isConnected, balance } = useWeb3ModalAccount();
+  const { address, chainId, isConnected } = useWeb3ModalAccount();
   const { walletProvider } = useWeb3ModalProvider();
 
   const ethersProvider = isConnected
@@ -70,14 +70,11 @@ function useEthereumWallet() {
     : null;
   const signer = isConnected ? ethersProvider.getSigner() : null;
 
-  console.log("balance: " + balance);
-  // const balance = ethers.provider.getBalance(address);
-
-  return { address, chainId, isConnected, ethersProvider, signer, balance };
+  return { address, chainId, isConnected, ethersProvider, signer };
 }
 
 export default function Index() {
-  const { balance, address, chainId, isConnected, ethersProvider, signer } =
+  const { address, chainId, isConnected, ethersProvider, signer } =
     useEthereumWallet();
 
   const [contract, setContract] = useState(null);
@@ -86,6 +83,7 @@ export default function Index() {
   const [transactionCount, setTransactionCount] = useState(0);
   const [toAddress, setToAddress] = useState("");
   const [amount, setAmount] = useState("");
+  const [balance, setBalance] = useState(0);
   const [message, setMessage] = useState("");
   const [messageResponse, setMessageResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -94,8 +92,11 @@ export default function Index() {
   const handleClose = () => setOpen(false);
 
   const getTransaction = async () => {
+    console.log("Getting Contract");
     if (contract) {
+      console.log("There is contract");
       try {
+        console.log("Start getting contract");
         const transactions = await contract.getTransactions();
         const formattedTransactions = transactions.map((tx) => ({
           from: tx.from,
@@ -103,7 +104,10 @@ export default function Index() {
           amount: tx.amount.toString(), // Convert BigNumber to string (or .toNumber() if small)
           message: tx.message,
         }));
+
+        console.log("set Transaction");
         setTransactions(formattedTransactions);
+        console.log("set Transaction done");
       } catch (error) {
         console.error("Error Get Transaction: ", error);
       }
@@ -189,21 +193,36 @@ export default function Index() {
 
   const connectContract = async () => {
     if (isConnected && contract) {
-      console.log("getting data..");
+      console.log("before get transaction");
       getTransaction();
+      console.log("after get transaction");
       getTransactionCount();
+      getBalance();
     }
     if (isConnected && !contract) {
       const signer = ethersProvider?.getSigner();
       const contract = new ethers.Contract(ADDRESS, ABI, await signer);
       setContract(contract);
+      getTransaction();
+      getTransactionCount();
     }
     setIsMounted(true);
   };
 
+  const getBalance = async () => {
+    if (isConnected && ethersProvider) {
+      try {
+        const balance = await ethersProvider.getBalance(address);
+        setBalance(ethers.formatEther(balance));
+      } catch (error) {
+        console.error("Error fetching balance: ", error);
+      }
+    }
+  };
+
   useEffect(() => {
     connectContract();
-  }, [contract]);
+  }, [contract, isConnected]);
 
   if (!isMounted) {
     return null;
@@ -229,10 +248,13 @@ export default function Index() {
         address={address}
         tes="tes"
       />
-      <div className="w-full flex flex-col m-8" id="transfer">
-        <h1 className="text-5xl mb-4 text-[#B9B9B9]">Transfer Ether</h1>
-        <p className="text-[#B9B9B9] mb-[2rem]">
-          Sending your Ethereum (ETH) like a digital treasure across a vast,
+      <div
+        className="w-full flex flex-col m-8 items-center justify-center"
+        id="transfer"
+      >
+        <h1 className="text-5xl mb-4 text-[#B9B9B9]">Transfer Sepolia(ETH)</h1>
+        <p className="text-[#B9B9B9] mb-[2rem] w-[1000px] text-center">
+          Sending your Sepolia(ETH) like a digital treasure across a vast,
           mysterious landscape. With a few simple steps and a secure
           transaction, you can safely transfer your ETH from one wallet to
           another. It's like sending a secret message through a hidden tunnel,
@@ -240,7 +262,7 @@ export default function Index() {
           hitch.
         </p>
         <div className="flex items-center justify-center gap-8">
-          <Image src={EthVector} alt="EthVector" className="w-[300px]" />
+          <Image src={EthVector} alt="EthVector" className="w-[500px]" />
           <div className="flex gap-4 flex-col w-[600px]">
             <p className="text-[#B9B9B9] text-2xl">Now you can transfer ETH</p>
             <div className="grid grid-cols-2 items-start justify-center gap-8 w-full rounded-[10px] p-2 shadow-sm shadow-[#b9b9b9] border-[2px] border-[#b9b9b9]">
@@ -252,7 +274,7 @@ export default function Index() {
               </div>
               <div className="[&>*]:text-[#b9b9b9] flex flex-col gap-2 items-start justify-center">
                 <p>Balance</p>
-                <p>{address ? balance : "Waiting for connect wallet..."}</p>
+                <p>{balance ? balance : "Waiting for connect wallet..."}</p>
               </div>
             </div>
             <label className="shadow-sm shadow-[#b9b9b9] flex border-[2px] border-[#b9b9b9] gap-2 rounded-[10px] overflow-hidden">
@@ -305,48 +327,57 @@ export default function Index() {
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-col gap-3" id="transaction">
+      <div
+        className="w-full flex flex-col gap-3 items-center justify-center mt-10"
+        id="transaction"
+      >
         <h2 className="text-4xl text-[#b9b9b9]">Transaction History</h2>
-        <p className="text-[#b9b9b9] mb-[2rem]">
-          Ever wondered where your ETH has been? Or perhaps you're curious about
-          the intricacies of a smart contract interaction? Our Ethereum
-          transaction history explorer offers a crystal-clear view into the
-          blockchain's bustling activity
+        <p className="text-[#b9b9b9] mb-[2rem] w-[1000px] text-center">
+          Ever wondered where your Sepolia(ETH) has been? Or perhaps you're
+          curious about the intricacies of a smart contract interaction? Our
+          Ethereum transaction history explorer offers a crystal-clear view into
+          the blockchain's bustling activity
         </p>
-        <div className="grid grid-cols-4 justify-center gap-4">
-          {transactions?.map((item, index) => (
-            <div
-              key={index}
-              className="overflow-hidden pt-4 rounded-[15px] shadow-sm shadow-[#b9b9b9] [&>*]:text-[#b9b9b9] border-[2px] border-[#b9b9b9] flex flex-col justify-between"
-            >
-              <FaWallet className="text-7xl mx-auto mb-[1rem]" />
-              <div className="px-4">
-                <p>
-                  From:{" "}
-                  {item.from.substring(0, 8) +
-                    "..." +
-                    item.from.substr(item.from.length - 8)}
-                </p>
-                <p>
-                  To:{" "}
-                  {item.to.substring(0, 8) +
-                    "..." +
-                    item.to.substr(item.to.length - 8)}
-                </p>
-                <p>Amount: {ethers.parseEther("1000000000000")} ETH</p>
-              </div>
-              <button
-                onClick={() => {
-                  setMessageResponse(item.message);
-                  handleOpen();
-                }}
-                className="w-full bg-[#b9b9b9] !text-black"
+        {transactions?.length < 1 ? (
+          <p className="text-[#b9b9b9]">Waiting for connect wallet...</p>
+        ) : (
+          <div className="grid grid-cols-4 justify-center gap-4">
+            {transactions?.map((item, index) => (
+              <div
+                key={index}
+                className="overflow-hidden pt-4 rounded-[15px] shadow-sm shadow-[#b9b9b9] [&>*]:text-[#b9b9b9] border-[2px] border-[#b9b9b9] flex flex-col justify-between"
               >
-                Message
-              </button>
-            </div>
-          ))}
-        </div>
+                <FaWallet className="text-7xl mx-auto mb-[1rem]" />
+                <div className="px-4 pb-4">
+                  <p>
+                    From:{" "}
+                    {item.from.substring(0, 8) +
+                      "..." +
+                      item.from.substr(item.from.length - 8)}
+                  </p>
+                  <p>
+                    To:{" "}
+                    {item.to.substring(0, 8) +
+                      "..." +
+                      item.to.substr(item.to.length - 8)}
+                  </p>
+                  <p>
+                    Amount: {ethers.formatEther(item.amount.toString())} ETH
+                  </p>
+                </div>
+                <button
+                  onClick={() => {
+                    setMessageResponse(item.message);
+                    handleOpen();
+                  }}
+                  className="w-full bg-[#b9b9b9] !text-black"
+                >
+                  Message
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <Footer></Footer>
     </section>

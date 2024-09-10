@@ -5,7 +5,7 @@ import Link from "next/link";
 export default function navbar({ connectWallet, address }) {
   return (
     <nav className="w-full [&>*]:text-[#b9b9b9] gap-8 flex items-center justify-between">
-      <Link href="#hero">
+      <Link href="#">
         <LiaEthereum className="text-5xl !text-[#b9b9b9]" />
       </Link>
       <div className="flex items-center justify-center gap-9">
