@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Frontend with Hardhat Smart Contract
 
-## Getting Started
+## Overview
 
-First, run the development server:
+This repository is a Next.js project designed to interact with a Hardhat smart contract deployed on the Ethereum blockchain. The frontend application provides a user interface for interacting with the smart contract and viewing data from the blockchain.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Frontend Development:** Build dynamic and responsive user interfaces using Next.js.
+- **Smart Contract Integration:** Interact with Ethereum smart contracts using ethers.js.
+- **Data Display:** Fetch and display blockchain data in the frontend application.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Smart Contract Repository
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+The smart contract that this frontend interacts with is available in the `ethertransfercontract` repository. You can view and manage the contract's code and deployment from there.
 
-## Learn More
+- **Smart Contract Repository:** [ethertransfercontract](https://github.com/yourusername/ethertransfercontract)
 
-To learn more about Next.js, take a look at the following resources:
+## Frontend Application
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This frontend application is designed to interface with the smart contract to provide a user-friendly experience for interacting with the blockchain. The application fetches data from the smart contract and displays it to the user, allowing for interaction with the deployed contract functions.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Contract Address
 
-## Deploy on Vercel
+The smart contract is deployed at the following address:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Contract Address:** `0x503e714380f1134071C17455E3C7Bd76AA7137Ec`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Etherscan Link
+
+You can view the contract details and interact with it on Etherscan:
+
+- [Sepolia Etherscan - Contract Address](https://sepolia.etherscan.io/address/0x503e714380f1134071C17455E3C7Bd76AA7137Ec)
