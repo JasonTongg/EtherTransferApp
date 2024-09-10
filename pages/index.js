@@ -229,7 +229,7 @@ export default function Index() {
   }
 
   return (
-    <section className="background bg-black w-full min-h-screen p-8 px-14 flex flex-col items-center justify-between gap-4">
+    <section className="background bg-black w-full min-h-screen p-8 px-8 md:px-14 flex flex-col items-center justify-between gap-4">
       <Modal
         open={open}
         onClose={handleClose}
@@ -252,8 +252,10 @@ export default function Index() {
         className="w-full flex flex-col m-8 items-center justify-center"
         id="transfer"
       >
-        <h1 className="text-5xl mb-4 text-[#B9B9B9]">Transfer Sepolia(ETH)</h1>
-        <p className="text-[#B9B9B9] mb-[2rem] w-[1000px] text-center">
+        <h1 className="text-3xl md:text-5xl mb-4 text-[#B9B9B9] text-center">
+          Transfer Sepolia(ETH)
+        </h1>
+        <p className="text-[#B9B9B9] mb-[2rem] w-[95vw] lg:w-[1000px] text-center">
           Sending your Sepolia(ETH) like a digital treasure across a vast,
           mysterious landscape. With a few simple steps and a secure
           transaction, you can safely transfer your ETH from one wallet to
@@ -261,11 +263,15 @@ export default function Index() {
           ensuring your digital wealth arrives at its destination without a
           hitch.
         </p>
-        <div className="flex items-center justify-center gap-8">
-          <Image src={EthVector} alt="EthVector" className="w-[500px]" />
-          <div className="flex gap-4 flex-col w-[600px]">
+        <div className="flex items-center justify-center gap-8 lg:flex-row flex-col">
+          <Image
+            src={EthVector}
+            alt="EthVector"
+            className="w-[200px] md:w-[300px] lg:w-[500px]"
+          />
+          <div className="flex gap-4 flex-col w-[95vw] lg:w-[600px]">
             <p className="text-[#B9B9B9] text-2xl">Now you can transfer ETH</p>
-            <div className="grid grid-cols-2 items-start justify-center gap-8 w-full rounded-[10px] p-2 shadow-sm shadow-[#b9b9b9] border-[2px] border-[#b9b9b9]">
+            <div className="grid grid-cols-1 md:grid-cols-2 items-start justify-center gap-8 w-full rounded-[10px] p-2 shadow-sm shadow-[#b9b9b9] border-[2px] border-[#b9b9b9]">
               <div className="[&>*]:text-[#b9b9b9] flex flex-col gap-2 item-center justify-center">
                 <p>Account</p>
                 <p className="break-all">
@@ -331,8 +337,10 @@ export default function Index() {
         className="w-full flex flex-col gap-3 items-center justify-center mt-10"
         id="transaction"
       >
-        <h2 className="text-4xl text-[#b9b9b9]">Transaction History</h2>
-        <p className="text-[#b9b9b9] mb-[2rem] w-[1000px] text-center">
+        <h2 className="text-3xl lg:text-4xl text-[#b9b9b9] text-center">
+          Transaction History
+        </h2>
+        <p className="text-[#b9b9b9] mb-[2rem] w-[95vw] lg:w-[1000px] text-center">
           Ever wondered where your Sepolia(ETH) has been? Or perhaps you're
           curious about the intricacies of a smart contract interaction? Our
           Ethereum transaction history explorer offers a crystal-clear view into
@@ -341,7 +349,7 @@ export default function Index() {
         {transactions?.length < 1 ? (
           <p className="text-[#b9b9b9]">Waiting for connect wallet...</p>
         ) : (
-          <div className="grid grid-cols-4 justify-center gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 justify-center gap-4">
             {transactions?.map((item, index) => (
               <div
                 key={index}
